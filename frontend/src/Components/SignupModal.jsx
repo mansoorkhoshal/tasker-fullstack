@@ -1,0 +1,45 @@
+import React from 'react';
+
+const SignupModal = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md m-4">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-800">Sign Up</h2>
+                    <button onClick={onClose} className="text-gray-500 hover:text-gray-800 transition-colors">
+                        <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <form>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="fullName">Full Name</label>
+                        <input className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" type="text" id="fullName" placeholder="Stackson" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="email">Email</label>
+                        <input className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" type="email" id="email" placeholder="stackson.dev23@example.com" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">Password</label>
+                        <input className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" type="password" id="password" placeholder="Enter your password" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="contact">Contact</label>
+                        <input className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" type="text" id="contact" placeholder="+92-3337677344" />
+                    </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="image">Profile Image</label>
+                        <input className="w-full px-4 py-2 border rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-primary hover:file:bg-blue-100" type="file" id="image" />
+                    </div>
+                    <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300 font-semibold" type="submit">
+                        Create Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default SignupModal;

@@ -18,8 +18,8 @@ const Navbar = ({ onSignupClick, onLoginClick }) => {
                 <NavLink to="/learning" className={({ isActive }) => isActive ? activeLinkClasses : navLinkClasses}>Learning</NavLink>
             </div>
             <div className="hidden md:flex items-center space-x-4">
-                <button onClick={onLoginClick} className="text-gray-600 hover:text-blue-600 transition duration-300">Login</button>
-                <button onClick={onSignupClick} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Signup</button>
+                <button onClick={onLoginClick} className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white border  transition duration-300">Login</button>
+                <button onClick={onSignupClick} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-white border hover:text-blue-600 transition duration-300">Signup</button>
             </div>
             <div className="md:hidden">
                 <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-600 hover:text-blue-600 focus:outline-none">
