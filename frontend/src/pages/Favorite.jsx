@@ -64,9 +64,9 @@ const Favorite = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Favorite Tasks</h1>
+            <h1 className="text-3xl font-bold text-gray-600 my-6 mx-20 border p-5 rounded-2xl shadow-lg border-gray-300 bg-linear-to-br from-blue-50 via-white to-blue-100">Favorite Tasks</h1>
             {favoriteTasks.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-4">
                     {favoriteTasks.map(task => (
                         <TaskCard
                             key={task.id}
@@ -78,7 +78,7 @@ const Favorite = () => {
                     ))}
                 </div>
             ) : (
-                <p className="text-gray-500">You have no favorite tasks.</p>
+                <p className="text-gray-500 items-center flex justify-center mt-17 text-lg">You have no favorite tasks.</p>
             )}
             <TaskModal
                 isOpen={isTaskModalOpen}

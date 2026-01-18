@@ -74,13 +74,13 @@ const Home = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">All Tasks</h1>
-                <button onClick={openAddTaskModal} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition duration-300">
+            <div className="flex justify-between gap-4 sm:flex-row sm:justify-between sm:items-center my-6 mx-4 sm:mx-8 lg:mx-20 border p-4 rounded-2xl shadow-lg border-gray-300 bg-gradient-to-br from-blue-50 via-white to-blue-100">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-600 text-center sm:text-left ">All Tasks</h1>
+                <button onClick={openAddTaskModal} className=" bg-blue-600 text-white rounded-md hover:bg-blue-800 transition duration-300 w-30 sm:w-auto py-2 sm:py-3 sm:px-5 ">
                     Add Task
                 </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 px-4">
                 {tasks.map(task => (
                     <TaskCard
                         key={task.id}

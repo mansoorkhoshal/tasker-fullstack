@@ -8,7 +8,7 @@ const Navbar = ({ onSignupClick, onLoginClick }) => {
     const activeLinkClasses = "text-blue-600 font-semibold";
 
     return (
-        <nav className="bg-white shadow-md p-4 flex justify-between items-center">
+        <nav className="bg-white shadow-md p-4 flex justify-between items-center bg-linear-to-br from-blue-50 via-white to-blue-100">
             <div className="text-2xl font-bold text-blue-600">TaskManager</div>
             <div className="hidden md:flex items-center space-x-6">
                 <NavLink to="/" className={({ isActive }) => isActive ? activeLinkClasses : navLinkClasses}>All Tasks</NavLink>
@@ -29,7 +29,7 @@ const Navbar = ({ onSignupClick, onLoginClick }) => {
                 </button>
             </div>
             {isMenuOpen && (
-                <div className="absolute top-16 left-0 right-0 bg-white shadow-lg md:hidden">
+                <div className="absolute top-16 left-0 right-0 bg-white shadow-lg md:hidden z-50">
                     <div className="flex flex-col p-4 space-y-4">
                         <NavLink to="/" className={({ isActive }) => isActive ? activeLinkClasses : navLinkClasses} onClick={() => setIsMenuOpen(false)}>All Tasks</NavLink>
                         <NavLink to="/favorites" className={({ isActive }) => isActive ? activeLinkClasses : navLinkClasses} onClick={() => setIsMenuOpen(false)}>Favorite</NavLink>
@@ -37,7 +37,7 @@ const Navbar = ({ onSignupClick, onLoginClick }) => {
                         <NavLink to="/personal" className={({ isActive }) => isActive ? activeLinkClasses : navLinkClasses} onClick={() => setIsMenuOpen(false)}>Personal</NavLink>
                         <NavLink to="/learning" className={({ isActive }) => isActive ? activeLinkClasses : navLinkClasses} onClick={() => setIsMenuOpen(false)}>Learning</NavLink>
                         <div className="flex flex-col space-y-4">
-                            <button onClick={() => { onLoginClick(); setIsMenuOpen(false); }} className="text-gray-600 hover:text-blue-600 transition duration-300 text-left">Login</button>
+                            <button onClick={() => { onLoginClick(); setIsMenuOpen(false); }} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Login</button>
                             <button onClick={() => { onSignupClick(); setIsMenuOpen(false); }} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Signup</button>
                         </div>
                     </div>

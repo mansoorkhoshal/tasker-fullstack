@@ -62,9 +62,9 @@ const Learning = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Learning Tasks</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-600 my-6 mx-4 sm:mx-8 lg:mx-20 border p-4 sm:p-5 rounded-2xl shadow-lg border-gray-300 text-start sm:text-left bg-linear-to-br from-blue-50 via-white to-blue-100">Learning Tasks</h1>
       {learningTasks.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-4">
           {learningTasks.map(task => (
             <TaskCard
               key={task.id}
@@ -76,7 +76,7 @@ const Learning = () => {
           ))}
         </div>
       ) : (
-        <p className="text-gray-500">You have no tasks in the learning category.</p>
+        <p className="text-gray-500 items-center flex justify-center mt-17 text-lg">You have no tasks in the learning category.</p>
       )}
       <TaskModal
         isOpen={isTaskModalOpen}
