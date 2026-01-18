@@ -1,0 +1,100 @@
+import React, { useState, useEffect } from 'react';
+import { getTasks, updateTask, deleteTask as apiDeleteTask } from '../services/api';
+import TaskCard from '../Components/TaskCard';
+import Loader from '../Components/Loader';
+import ConfirmModal from '../Components/ConfirmModal';
+import TaskModal from '../Components/TaskModal';
+
+const Favorite = () => {
+    const [favoriteTasks, setFavoriteTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [taskToDelete, setTaskToDelete] = useState(null);
+    const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            setLoading(true);
+            const tasks = await getTasks();
+            setFavoriteTasks(tasks.filter(task => task.isFavorite));
+            setLoading(false);
+        };
+        fetchTasks();
+    }, []);
+
+    const handleFavoriteToggle = async (taskId) => {
+        const task = favoriteTasks.find(t => t.id === taskId);
+        if (task) {
+            const updatedTask = { ...task, isFavorite: !task.isFavorite };
+            await updateTask(updatedTask);
+            // Refetch or update state
+            setFavoriteTasks(prevTasks => prevTasks.filter(t => t.id !== taskId));
+        }
+    };
+
+    const handleEdit = (task) => {
+        setSelectedTask(task);
+        setIsTaskModalOpen(true);
+    };
+
+    const handleDelete = (taskId) => {
+        setTaskToDelete(taskId);
+        setIsConfirmModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        await apiDeleteTask(taskToDelete);
+        setFavoriteTasks(favoriteTasks.filter(t => t.id !== taskToDelete));
+        setIsConfirmModalOpen(false);
+        setTaskToDelete(null);
+    };
+
+    const handleSaveTask = async (taskData) => {
+        const updated = await updateTask(taskData);
+        setFavoriteTasks(favoriteTasks.map(t => t.id === updated.id ? updated : t));
+        setIsTaskModalOpen(false);
+        setSelectedTask(null);
+    };
+
+
+    if (loading) {
+        return <Loader />;
+    }
+
+    return (
+        <div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">Favorite Tasks</h1>
+            {favoriteTasks.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {favoriteTasks.map(task => (
+                        <TaskCard
+                            key={task.id}
+                            task={task}
+                            onFavoriteToggle={handleFavoriteToggle}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <p className="text-gray-500">You have no favorite tasks.</p>
+            )}
+            <TaskModal
+                isOpen={isTaskModalOpen}
+                onClose={() => setIsTaskModalOpen(false)}
+                onSave={handleSaveTask}
+                task={selectedTask}
+            />
+            <ConfirmModal
+                isOpen={isConfirmModalOpen}
+                onClose={() => setIsConfirmModalOpen(false)}
+                onConfirm={confirmDelete}
+                title="Confirm Deletion"
+                message="Are you sure you want to delete this task?"
+            />
+        </div>
+    );
+};
+
+export default Favorite;

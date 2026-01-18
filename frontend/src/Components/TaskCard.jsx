@@ -42,14 +42,14 @@ const TaskCard = ({ task, onFavoriteToggle, onEdit, onDelete }) => {
                     <span>{progress}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: `${progress}%` }}></div>
+                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${progress}%` }}></div>
                 </div>
             </div>
             <div className="flex justify-end items-center mt-4 space-x-2">
-                <button onClick={() => onEdit(task)} className="text-gray-500 hover:text-primary transition-colors duration-300">
+                <button onClick={() => onEdit(task)} className="text-white bg-green-500 hover:bg-green-700 px-2 py-1 transition-colors duration-300">
                     Edit
                 </button>
-                <button onClick={() => onDelete(task.id)} className="text-gray-500 hover:text-red-500 transition-colors duration-300">
+                <button onClick={() => onDelete(task.id)} className="text-white bg-red-500 hover:bg-red-700 px-2 py-1 transition-colors duration-300">
                     Delete
                 </button>
             </div>
