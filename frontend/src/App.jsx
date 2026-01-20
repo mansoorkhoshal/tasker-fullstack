@@ -1,5 +1,12 @@
-import Navbar from "./Components/Navbar";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
+
+import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
+
+// Modals
+import LoginModal from "./Components/LoginModal";
+import SignupModal from "./Components/SignupModal";
 
 // Pages
 import Home from "./pages/Home";
@@ -9,10 +16,24 @@ import Personal from "./pages/Personal";
 import Learning from "./pages/Learning";
 
 const App = () => {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+
   return (
     <>
-      <Navbar />
+      {/* Navbar */}
+      <Navbar
+        onLoginClick={() => {
+          setIsLoginOpen(true);
+          setIsSignupOpen(false);
+        }}
+        onSignupClick={() => {
+          setIsSignupOpen(true);
+          setIsLoginOpen(false);
+        }}
+      />
 
+      {/* Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/favorites" element={<Favorite />} />
@@ -20,6 +41,25 @@ const App = () => {
         <Route path="/personal" element={<Personal />} />
         <Route path="/learning" element={<Learning />} />
       </Routes>
+
+      {/* Modals */}
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onLogin={(e) => {
+          e.preventDefault();
+          console.log("Login submitted");
+          setIsLoginOpen(false);
+        }}
+      />
+
+      <SignupModal
+        isOpen={isSignupOpen}
+        onClose={() => setIsSignupOpen(false)}
+      />
+
+      {/* Footer */}
+      <Footer />
     </>
   );
 };

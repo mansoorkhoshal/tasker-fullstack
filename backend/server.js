@@ -1,10 +1,12 @@
 const { ConnectDB } = require("./UTILS/DbConnect");
 const express = require("express");
-
+const cors=require("cors")
 const app = express();
 ConnectDB();
 
 app.use(express.json());
+
+app.use(cors())
 
 app.use("/api/category", require("./Routes/CategoryRoute.js"));
 app.use("/api/status", require("./Routes/StatusRoute.js"));

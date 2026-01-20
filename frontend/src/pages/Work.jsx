@@ -56,13 +56,20 @@ const Work = () => {
     setSelectedTask(null);
   };
 
+  const openAddTaskModal = () => {
+    setSelectedTask(null);
+    setIsTaskModalOpen(true);
+  }
+
   if (loading) {
     return <Loader />;
   }
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-600 my-6 mx-20 border p-5 rounded-2xl shadow-lg border-gray-300 bg-linear-to-br from-blue-50 via-white to-blue-100">Work Tasks</h1>
+      <div className='flex justify-between gap-4 sm:flex-row sm:justify-between sm:items-center my-6 mx-4 sm:mx-8 lg:mx-20 border p-4 rounded-2xl shadow-lg border-gray-300 bg-linear-to-br from-blue-50 via-white to-blue-100'>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-600 text-center sm:text-left">Work Tasks</h1>
+      </div>
       {workTasks.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-4">
           {workTasks.map(task => (

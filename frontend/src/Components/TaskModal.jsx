@@ -111,11 +111,11 @@ const TaskModal = ({ isOpen, onClose, onSave, task }) => {
             <div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="progress">Progress ({formData.progress}%)</label>
-                <input className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" type="range" name="progress" id="progress" min="0" max="100" value={formData.progress} onChange={handleChange} />
+                <input className="w-full h-2 bg-gray-200 rounded-lg appearance-auto cursor-pointer" type="range" name="progress" id="progress" min="0" max="100" value={formData.progress} onChange={handleChange} />
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="description">Description</label>
-                <textarea className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" name="description" id="description" rows="4" value={formData.description} onChange={handleChange}></textarea>
+                <textarea className="w-full px-4 py-2 border rounded-lg" name="description" id="description" rows="4" value={formData.description} onChange={handleChange}></textarea>
               </div>
             </div>
           )}

@@ -4,6 +4,7 @@ import TaskCard from '../Components/TaskCard';
 import Loader from '../Components/Loader';
 import TaskModal from '../Components/TaskModal';
 import ConfirmModal from '../Components/ConfirmModal';
+// import Singup from '../Models/Singup';
 
 const Home = () => {
     const [tasks, setTasks] = useState([]);
@@ -73,38 +74,45 @@ const Home = () => {
     }
 
     return (
-        <div>
-            <div className="flex justify-between gap-4 sm:flex-row sm:justify-between sm:items-center my-6 mx-4 sm:mx-8 lg:mx-20 border p-4 rounded-2xl shadow-lg border-gray-300 bg-gradient-to-br from-blue-50 via-white to-blue-100">
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-600 text-center sm:text-left ">All Tasks</h1>
-                <button onClick={openAddTaskModal} className=" bg-blue-600 text-white rounded-md hover:bg-blue-800 transition duration-300 w-30 sm:w-auto py-2 sm:py-3 sm:px-5 ">
-                    Add Task
-                </button>
+
+        <>
+            <div>
+                <div className="flex justify-between gap-4 sm:flex-row sm:justify-between sm:items-center my-6 mx-4 sm:mx-8 lg:mx-20 border p-4 rounded-2xl shadow-lg border-gray-300 bg-linear-to-br from-blue-50 via-white to-blue-100">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-600 text-center sm:text-left ">All Tasks</h1>
+                    <button onClick={openAddTaskModal} className=" bg-blue-600 text-white rounded-md hover:bg-blue-800 transition duration-300 w-30 sm:w-auto py-2 sm:py-3 sm:px-5 ">
+                        Add Task
+                    </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 px-4">
+                    {tasks.map(task => (
+                        <TaskCard
+                            key={task.id}
+                            task={task}
+                            onFavoriteToggle={handleFavoriteToggle}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                        />
+                    ))}
+                </div>
+                <TaskModal
+                    isOpen={isTaskModalOpen}
+                    onClose={() => setIsTaskModalOpen(false)}
+                    onSave={handleSaveTask}
+                    task={selectedTask}
+                />
+                <ConfirmModal
+                    isOpen={isConfirmModalOpen}
+                    onClose={() => setIsConfirmModalOpen(false)}
+                    onConfirm={confirmDelete}
+                    title="Confirm Deletion"
+                    message="Are you sure you want to delete this task?"
+                />
+
+
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 px-4">
-                {tasks.map(task => (
-                    <TaskCard
-                        key={task.id}
-                        task={task}
-                        onFavoriteToggle={handleFavoriteToggle}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                    />
-                ))}
-            </div>
-            <TaskModal
-                isOpen={isTaskModalOpen}
-                onClose={() => setIsTaskModalOpen(false)}
-                onSave={handleSaveTask}
-                task={selectedTask}
-            />
-            <ConfirmModal
-                isOpen={isConfirmModalOpen}
-                onClose={() => setIsConfirmModalOpen(false)}
-                onConfirm={confirmDelete}
-                title="Confirm Deletion"
-                message="Are you sure you want to delete this task?"
-            />
-        </div>
+        </>
+
+
     );
 };
 

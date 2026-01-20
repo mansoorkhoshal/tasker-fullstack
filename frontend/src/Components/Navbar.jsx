@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = ({ onSignupClick, onLoginClick }) => {
@@ -8,7 +8,7 @@ const Navbar = ({ onSignupClick, onLoginClick }) => {
     const activeLinkClasses = "text-blue-600 font-semibold";
 
     return (
-        <nav className="bg-white shadow-md p-4 flex justify-between items-center bg-linear-to-br from-blue-50 via-white to-blue-100">
+        <nav className="bg-white shadow-md p-4 flex justify-between items-center bg-linear-to-b from-blue-50 to-white">
             <div className="text-2xl font-bold text-blue-600">TaskManager</div>
             <div className="hidden md:flex items-center space-x-6">
                 <NavLink to="/" className={({ isActive }) => isActive ? activeLinkClasses : navLinkClasses}>All Tasks</NavLink>
