@@ -35,20 +35,20 @@ const SignupModal = ({ isOpen, onClose }) => {
         formData.append("email", data.email);
         formData.append("password", data.password);
         formData.append("contact", data.contact);
-        formData.append("image", data.image[0]); // ✅ IMPORTANT
+        formData.append("image", data.image[0]);
 
         const res = await fetch('http://localhost:4000/api/user/signup', {
             method: "POST",
             body: formData
         })
 
-        const result= await res.json()
+        const result = await res.json()
 
         if (!res.ok) {
-          return   toast.error(result)
+            return toast.error(result)
         }
 
-        toast.success("user created successfully")
+        toast.success("User Created Successfully")
         reset();
     }
 

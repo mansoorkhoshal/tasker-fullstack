@@ -5,8 +5,15 @@ const app = express();
 ConnectDB();
 
 app.use(express.json());
+app.use(express.urlencoded({extended:true}))
 
-app.use(cors())
+// const cors = require("cors");
+
+app.use(cors({
+  origin: "http://localhost:5173", // or 3000
+  credentials: true, // 🔥 VERY IMPORTANT
+}));
+
 
 app.use("/api/category", require("./Routes/CategoryRoute.js"));
 app.use("/api/status", require("./Routes/StatusRoute.js"));
