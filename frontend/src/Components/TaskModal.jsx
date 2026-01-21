@@ -1,128 +1,287 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const TaskModal = ({ isOpen, onClose, onSave, task }) => {
   const [activeTab, setActiveTab] = useState('basic');
-  const [formData, setFormData] = useState({
-    title: '',
-    dueDate: '',
-    dueTime: '',
-    category: 'Work',
-    status: 'Todo',
-    progress: 0,
-    description: '',
+  const [fecthData, setFecthData] = useState([]);
+  const [categoryFetchData, setcategoryFetchData] = useState([]);
+
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+  } = useForm({
+    defaultValues: {
+      title: '',
+      dueDate: '',
+      dueTime: '',
+      category: 'Work',
+      status: 'Todo',
+      progress: 0,
+      description: '',
+    },
   });
 
+  const progressValue = watch('progress');
+
   useEffect(() => {
-    if (task) {
-      setFormData({
-        title: task.title || '',
-        dueDate: task.dueDate || '',
-        dueTime: task.dueTime || '',
-        category: task.category || 'Work',
-        status: task.status || 'Todo',
-        progress: task.progress || 0,
-        description: task.description || '',
-      });
-    } else {
-      setFormData({
-        title: '',
-        dueDate: '',
-        dueTime: '',
-        category: 'Work',
-        status: 'Todo',
-        progress: 0,
-        description: '',
-      });
+    try {
+
+      fetch('http://localhost:4000/api/status')
+        .then((response) => {
+
+          if (response.status == 200) {
+            response.json()
+              .then((jsonData) => {
+                // console.log(jsonData)
+                setFecthData(jsonData)
+              })
+          }
+          // .catch((err) => { console.log(err.message) })
+
+        })
+      // console.log(fecthData)
+    } catch (error) {
+      console.log(error.message)
     }
-  }, [task, isOpen]);
+  }, [])
+
+
+  useEffect(() => {
+    try {
+      fetch("http://localhost:4000/api/category")
+        .then((categoryResponse) => {
+          if (categoryResponse.status == 200) {
+            categoryResponse.json()
+              .then((categoryJsonData) => {
+                // console.log(categoryJsonData);
+                setcategoryFetchData(categoryJsonData)
+              })
+          }
+        })
+    } catch (error) {
+      console.log(error.message)
+    }
+  })
+
+  // useEffect(() => {
+  //   if (task) {
+  //     reset({
+  //       title: task.title || '',
+  //       dueDate: task.dueDate || '',
+  //       dueTime: task.dueTime || '',
+  //       category: task.category || 'Work',
+  //       status: task.status || 'Todo',
+  //       progress: task.progress || 0,
+  //       description: task.description || '',
+  //     });
+  //   } else {
+  //     reset({
+  //       title: '',
+  //       dueDate: '',
+  //       dueTime: '',
+  //       category: 'Work',
+  //       status: 'Todo',
+  //       progress: 0,
+  //       description: '',
+  //     });
+  //   }
+  // }, [task, isOpen, reset]);
 
   if (!isOpen) return null;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const onSubmit = (data) => {
+    // const finalData = {
+    //   ...data,
+    //   id: task ? task.id : undefined,
+    // };
+    console.log(data)
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave({ ...formData, id: task ? task.id : undefined });
+    // console.log('Task Data:', finalData);
+
+    // onSave(finalData);
+    onClose();
+
+
+    const payload = {
+      title: data.title,
+      description: data.description,
+      isFavourite: data.isFavourite,
+      dueDate: data.dueDate,
+      dueTime: data.dueTime,
+      progress: data.progress,
+      createdBy: data.createdBy,
+      createdOn: data.createdOn,
+      categoryId: data.categoryId,
+      statusId: data.statusId,
+      priorityId: data.priorityId,
+    }
+
+    fetch('http://localhost:4000/api/task/', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    }).then((response) => {
+      if (response.status == 200) {
+        response.json().then((jsonData) => {
+          toast("task created successfuly")
+        })
+      }
+    }).catch((err) => { console.log(err.message) })
+
+
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-lg m-4">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">{task ? 'Edit Task' : 'Add Task'}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-800 transition-colors">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <h2 className="text-2xl font-bold text-gray-800">
+            {task ? 'Edit Task' : 'Add Task'}
+          </h2>
+          <button onClick={onClose} className="text-red-400 hover:text-red-700 font-bold">
+            ✕
           </button>
         </div>
 
-        <div className="border-b border-gray-200 mb-6">
-          <nav className="-mb-px flex space-x-6">
-            <button onClick={() => setActiveTab('basic')} className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'basic' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+        <div className="border-b mb-6">
+          <nav className="flex space-x-6">
+            <button
+              onClick={() => setActiveTab('basic')}
+              className={`py-2 border-b-2 ${activeTab === 'basic'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-500'
+                }`}
+            >
               Basic
             </button>
-            <button onClick={() => setActiveTab('more')} className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'more' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+            <button
+              onClick={() => setActiveTab('more')}
+              className={`py-2 border-b-2 ${activeTab === 'more'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-500'
+                }`}
+            >
               More
             </button>
           </nav>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           {activeTab === 'basic' && (
-            <div>
+            <>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="title">Title</label>
-                <input className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" type="text" name="title" id="title" value={formData.title} onChange={handleChange} required />
+                <label className="block mb-2 font-semibold">Title</label>
+                <input
+                  className="w-full px-4 py-2 border rounded-lg"
+                  {...register('title', { required: true })}
+                />
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="dueDate">Due Date</label>
-                  <input className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" type="date" name="dueDate" id="dueDate" value={formData.dueDate} onChange={handleChange} required />
+                  <label className="block mb-2 font-semibold">Due Date</label>
+                  <input
+                    type="date"
+                    className="w-full px-4 py-2 border rounded-lg"
+                    {...register('dueDate', { required: true })}
+                  />
                 </div>
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="dueTime">Due Time</label>
-                  <input className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" type="time" name="dueTime" id="dueTime" value={formData.dueTime} onChange={handleChange} required />
+                  <label className="block mb-2 font-semibold">Due Time</label>
+                  <input
+                    type="time"
+                    className="w-full px-4 py-2 border rounded-lg"
+                    {...register('dueTime', { required: true })}
+                  />
                 </div>
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="category">Category</label>
-                  <select className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white" name="category" id="category" value={formData.category} onChange={handleChange}>
-                    <option>Work</option>
-                    <option>Personal</option>
-                    <option>Learning</option>
+                  <label className="block mb-2 font-semibold">Category</label>
+                  <select
+                    className="w-full px-4 py-2 border rounded-lg"
+                    {...register('categoryId')}
+                  >
+                    {
+                      (categoryFetchData && categoryFetchData.length > 0) ?
+                        categoryFetchData.map((i) => (
+                          <option key={i._id} value={i._id}>{i.Name}</option>
+                        ))
+                        : "No Category Avaliable"
+                    }
                   </select>
                 </div>
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="status">Status</label>
-                  <select className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white" name="status" id="status" value={formData.status} onChange={handleChange}>
-                    <option>Todo</option>
-                    <option>In Progress</option>
-                    <option>Completed</option>
+                  <label className="block mb-2 font-semibold">Status</label>
+                  <select
+                    className="w-full px-4 py-2 border rounded-lg"
+                    {...register('statusId')}
+                  >
+                    {
+                      (fecthData && fecthData.length > 0) ?
+                        fecthData.map((i) => (
+                          <option key={i._id} value={i._id} className=''>{i.Name}</option>
+                        ))
+
+                        : "No Status Avaliable"
+                    }
                   </select>
                 </div>
               </div>
-            </div>
+            </>
           )}
 
           {activeTab === 'more' && (
-            <div>
+            <>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="progress">Progress ({formData.progress}%)</label>
-                <input className="w-full h-2 bg-gray-200 rounded-lg appearance-auto cursor-pointer" type="range" name="progress" id="progress" min="0" max="100" value={formData.progress} onChange={handleChange} />
+                <label className="block mb-2 font-semibold">
+                  Progress ({progressValue}%)
+                </label>
+
+                <select
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white"
+                  {...register('progress')}
+                >
+                  <option value={0}>0% you didn't start yet</option>
+                  <option value={25}>25% you just started working on it</option>
+                  <option value={50}>50% you're halfway through the task</option>
+                  <option value={75}>75% almost done, just a little left</option>
+                  <option value={100}>100% task completed successfully</option>
+                </select>
               </div>
+
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="description">Description</label>
-                <textarea className="w-full px-4 py-2 border rounded-lg" name="description" id="description" rows="4" value={formData.description} onChange={handleChange}></textarea>
+                <label className="block mb-2 font-semibold">Description</label>
+                <textarea
+                  rows="4"
+                  className="w-full px-4 py-2 border rounded-lg"
+                  {...register('description')}
+                />
               </div>
-            </div>
+            </>
           )}
 
-          <div className="mt-8 flex justify-end space-x-4">
-            <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancel</button>
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600 transition-colors">{task ? 'Save Changes' : 'Add Task'}</button>
+          <div className="mt-8 flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-200 rounded-lg"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+            >
+              {task ? 'Save Changes' : 'Add Task'}
+            </button>
           </div>
         </form>
       </div>

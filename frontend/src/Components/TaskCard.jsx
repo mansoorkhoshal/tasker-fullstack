@@ -2,6 +2,13 @@ import React from 'react';
 
 const TaskCard = ({ task, onFavoriteToggle, onEdit, onDelete }) => {
     const { title, dueDate, dueTime, status, progress, isFavorite, category, description } = task;
+    // const { selectedId, setSelectedId } = useState(null)
+    // const { showModel, setShowModel } = useState(false)
+
+
+    // function openEditModal(id) {
+    //     setSelectedId(id);
+    // }
 
     const getStatusClass = (status) => {
         switch (status) {

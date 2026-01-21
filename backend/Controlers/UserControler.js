@@ -1,4 +1,4 @@
-const Users = require("../Models/User");
+const User = require("../Models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -20,7 +20,7 @@ require("dotenv").config();
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const result = await Users.find();
+    const result = await User.find();
     if (result.length > 0) {
       res.status(200).json(result);
     } else {
@@ -33,7 +33,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.GetUsersById = async (req, res) => {
   try {
-    const result = await Users.findById(req.params.id);
+    const result = await User.findById(req.params.id);
 
     if (result) {
       res.status(200).json(result);
@@ -47,7 +47,7 @@ exports.GetUsersById = async (req, res) => {
 
 exports.DeleteUsers = async (req, res) => {
   try {
-    const result = await Users.findByIdAndDelete(req.params.id);
+    const result = await User.findByIdAndDelete(req.params.id);
 
     if (result) {
       res.status(200).json("User deleted successfully");
@@ -63,7 +63,7 @@ exports.UpdateUsers = async (req, res) => {
   try {
     const { fullName, email, password, contact, image } = req.body;
 
-    const result = await Users.findByIdAndUpdate(
+    const result = await User.findByIdAndUpdate(
       req.params.id,
       { fullName, email, password, contact, image },
       { new: true },
@@ -83,7 +83,7 @@ exports.Signup = async (req, res) => {
   try {
     let { fullName, email, password, contact } = req.body;
     // console.log(req.body);
-    const isExisting = await Users.findOne({ email });
+    const isExisting = await User.findOne({ email });
     if (isExisting) {
       return res.status(400).json(`User is already exist with ${email}`);
     }
@@ -143,7 +143,7 @@ exports.Login = async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    const existingUser = await Users.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (!existingUser) {
       return res.status(404).json({ message: `User not found with ${email}` });
     }
