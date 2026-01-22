@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./Components/Navbar";
@@ -14,10 +14,26 @@ import Favorite from "./pages/Favorite";
 import Work from "./pages/Work";
 import Personal from "./pages/Personal";
 import Learning from "./pages/Learning";
+import TaskCard from "./Components/TaskCard";
 
 const App = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [taskStore, setTaskStore] = useState([])
+
+
+  useEffect(() => {
+    fetch('http://localhost:4000/api/task/')
+      .then((resposne) => {
+        if (resposne.status == 200 || resposne.status == 201) {
+          resposne.json()
+            .then((jsonData) => {
+              console.log(jsonData)
+              setTaskStore(jsonData.data)
+            })
+        }
+      })
+  }, [])
 
   return (
     <>
@@ -57,6 +73,14 @@ const App = () => {
         isOpen={isSignupOpen}
         onClose={() => setIsSignupOpen(false)}
       />
+
+      {
+        (taskStore && taskStore.length > 0) ?
+          taskStore.map((i) => (
+            <TaskCard key={i._id} items={i} />
+          )) : "no data"
+
+      }
 
       {/* Footer */}
       <Footer />

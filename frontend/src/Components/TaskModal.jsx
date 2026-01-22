@@ -127,14 +127,14 @@ const TaskModal = ({ isOpen, onClose, onSave, task }) => {
       },
       body: JSON.stringify(payload)
     }).then((response) => {
-      if (response.status == 200) {
+      if (response.status == 200 || response.status == 201) {
         response.json().then((jsonData) => {
-          toast("task created successfuly")
+          alert("Task Created Successfuly")
         })
       }
     }).catch((err) => { console.log(err.message) })
 
-
+    window.location.reload()
   };
 
   return (
@@ -222,7 +222,7 @@ const TaskModal = ({ isOpen, onClose, onSave, task }) => {
                   <label className="block mb-2 font-semibold">Status</label>
                   <select
                     className="w-full px-4 py-2 border rounded-lg"
-                    {...register('statusId')}
+                    {...register('status')}
                   >
                     {
                       (fecthData && fecthData.length > 0) ?
