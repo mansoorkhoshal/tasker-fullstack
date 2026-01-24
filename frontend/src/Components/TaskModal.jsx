@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 
 const TaskModal = ({ isOpen, onClose, onSave, task }) => {
   const [activeTab, setActiveTab] = useState('basic');
@@ -36,14 +35,11 @@ const TaskModal = ({ isOpen, onClose, onSave, task }) => {
           if (response.status == 200) {
             response.json()
               .then((jsonData) => {
-                // console.log(jsonData)
                 setFecthData(jsonData)
               })
           }
-          // .catch((err) => { console.log(err.message) })
 
         })
-      // console.log(fecthData)
     } catch (error) {
       console.log(error.message)
     }
@@ -57,7 +53,6 @@ const TaskModal = ({ isOpen, onClose, onSave, task }) => {
           if (categoryResponse.status == 200) {
             categoryResponse.json()
               .then((categoryJsonData) => {
-                // console.log(categoryJsonData);
                 setcategoryFetchData(categoryJsonData)
               })
           }
@@ -94,15 +89,7 @@ const TaskModal = ({ isOpen, onClose, onSave, task }) => {
   if (!isOpen) return null;
 
   const onSubmit = (data) => {
-    // const finalData = {
-    //   ...data,
-    //   id: task ? task.id : undefined,
-    // };
     console.log(data)
-
-    // console.log('Task Data:', finalData);
-
-    // onSave(finalData);
     onClose();
 
 

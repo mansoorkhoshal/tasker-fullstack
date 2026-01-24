@@ -1,17 +1,45 @@
 import React, { useState } from 'react';
+import TaskModal from '../Components/TaskModal';
+import EditModal from './EditModal';
+import ConfirmModal from './ConfirmModal';
 
-const TaskCard = ({ items, onDelete, onEdit, progress }) => {
+const TaskCard = ({ items, progress }) => {
 
+    const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [editId, setEditId] = useState(null)
+    const [showModal, setShowModal] = useState(false)
+    const [deleteId, setDeleteId] = useState(null)
+
+    function handleDelete(id) {
+        alert(`delete id is : ${id}`)
+        setDeleteId(id);
+        setShowModal(true)
+    }
+
+    function handleId(id) {
+        alert(`id of this card is ${id}`)
+        setEditId(id)
+        setShowModal(true)
+    }
     if (!items) return null;
 
     const [isFav, setIsFav] = useState(items.isFavourite);
 
     const handleFavoriteClick = () => {
         setIsFav(prev => !prev);
+
     };
 
+    const openAddTaskModal = () => {
+        setSelectedTask(null);
+        setIsTaskModalOpen(true);
+    };
+
+
     return (
-        <div className='flex justify-start items-start'>
+        <div className=''>
             <div className="bg-white/80 backdrop-blur-md p-5 rounded-xl shadow-md 
                         hover:shadow-xl hover:-translate-y-1 transition-all duration-300 
                         border border-blue-100">
@@ -51,11 +79,11 @@ const TaskCard = ({ items, onDelete, onEdit, progress }) => {
                 </p>
 
                 <div className="flex justify-between items-center mt-4">
-                    <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700">
+                    <span className="text-sm text-blue-700 bg-blue-100 px-2 py-1 rounded-full">
                         {items.statusId?.Name || 'No Status'}
                     </span>
 
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-blue-700 bg-blue-100 px-2 py-1 rounded-full">
                         {items.categoryId?.Name || 'No Category'}
                     </span>
                 </div>
@@ -77,7 +105,8 @@ const TaskCard = ({ items, onDelete, onEdit, progress }) => {
                 <div className="flex justify-end gap-2 mt-4">
 
                     <button
-                        onClick={() => onEdit(items)}
+                        // onClick={openAddTaskModal}
+                        onClick={() => { handleId(items._id) }}
                         className="bg-green-500 text-white px-3 py-1 rounded 
                                hover:bg-green-600 transition-colors"
                     >
@@ -85,14 +114,19 @@ const TaskCard = ({ items, onDelete, onEdit, progress }) => {
                     </button>
 
                     <button
-                        onClick={() => onDelete(items._id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded 
-                               hover:bg-red-600 transition-colors"
+                        // onClick={handleDelete}
+                        onClick={() => { handleDelete(items._id) }}
+                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                     >
                         Delete
                     </button>
                 </div>
             </div>
+            <EditModal
+                show={showModal} id={editId} handleClose={() => { setShowModal(false) }}
+            />
+            <ConfirmModal
+                show={showModal} id={deleteId} handleClose={() => { setShowModal(false) }} />
         </div>
     );
 };

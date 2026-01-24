@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTasks, updateTask, deleteTask as apiDeleteTask } from '../services/api';
+// import { getTasks, updateTask, deleteTask as apiDeleteTask } from '../services/api';
 import TaskCard from '../Components/TaskCard';
 import Loader from '../Components/Loader';
 import ConfirmModal from '../Components/ConfirmModal';

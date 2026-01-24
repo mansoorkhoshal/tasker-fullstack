@@ -60,7 +60,7 @@ exports.getAllTasks = async (req, res) => {
 exports.GetTaskById = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
-      .populate("createdBy")
+      // .populate("createdBy")
       .populate("categoryId")
       .populate("statusId")
       .populate("priorityId");

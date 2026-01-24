@@ -4,11 +4,9 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 
-// Modals
 import LoginModal from "./Components/LoginModal";
 import SignupModal from "./Components/SignupModal";
 
-// Pages
 import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
 import Work from "./pages/Work";
@@ -37,7 +35,6 @@ const App = () => {
 
   return (
     <>
-      {/* Navbar */}
       <Navbar
         onLoginClick={() => {
           setIsLoginOpen(true);
@@ -49,7 +46,6 @@ const App = () => {
         }}
       />
 
-      {/* Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/favorites" element={<Favorite />} />
@@ -58,7 +54,6 @@ const App = () => {
         <Route path="/learning" element={<Learning />} />
       </Routes>
 
-      {/* Modals */}
       <LoginModal
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
@@ -74,16 +69,27 @@ const App = () => {
         onClose={() => setIsSignupOpen(false)}
       />
 
+
       {
-        (taskStore && taskStore.length > 0) ?
-          taskStore.map((i) => (
-            <TaskCard key={i._id} items={i} />
-          )) : "no data"
+        taskStore && taskStore.length === 0 ? (
+          <div className="text-center text-gray-500 mt-20">
+            No tasks found. Start by adding one
+          </div>
+        ) : (
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mx-10"
+          >
+            {taskStore.map(task => (
+              <TaskCard
+                key={task._id || task.id}
+                items={task}
+                progress={task.progress || 0}
+              />
+            ))}
+          </div>
+        )}
 
-      }
-
-      {/* Footer */}
-      <Footer />
+      < Footer />
     </>
   );
 };
