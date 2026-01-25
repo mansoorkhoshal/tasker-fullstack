@@ -100,7 +100,7 @@ const TaskModal = ({ isOpen, onClose, onSave, task }) => {
       dueDate: data.dueDate,
       dueTime: data.dueTime,
       progress: data.progress,
-      createdBy: data.createdBy,
+      // createdBy: data.createdBy,
       createdOn: data.createdOn,
       categoryId: data.categoryId,
       statusId: data.statusId,
@@ -131,7 +131,7 @@ const TaskModal = ({ isOpen, onClose, onSave, task }) => {
           <h2 className="text-2xl font-bold text-gray-800">
             {task ? 'Edit Task' : 'Add Task'}
           </h2>
-          <button onClick={onClose} className="text-red-400 hover:text-red-700 font-bold">
+          <button onClick={onClose} className="text-red-500 font-bold text-2xl hover:text-red-700">
             ✕
           </button>
         </div>

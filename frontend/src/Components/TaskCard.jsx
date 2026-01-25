@@ -3,20 +3,23 @@ import TaskModal from '../Components/TaskModal';
 import EditModal from './EditModal';
 import ConfirmModal from './ConfirmModal';
 
-const TaskCard = ({ items, progress }) => {
+const TaskCard = ({ items, progress, onFavoriteToggle, onDelete }) => {
 
-    const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-    const [selectedTask, setSelectedTask] = useState(null);
-    const [editId, setEditId] = useState(null)
-    const [showModal, setShowModal] = useState(false)
-    const [deleteId, setDeleteId] = useState(null)
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [editId, setEditId] = useState(null);
+    const [isEditOpen, setIsEditOpen] = useState(false);
 
-    function handleDelete(id) {
-        alert(`delete id is : ${id}`)
+    const handleDeleteClick = (id) => {
         setDeleteId(id);
-        setShowModal(true)
-    }
+        setIsConfirmOpen(true);
+    };
+
+    const confirmDelete = () => {
+        onDelete(deleteId);
+        setIsConfirmOpen(false);
+        setDeleteId(null);
+    };
 
     function handleId(id) {
         alert(`id of this card is ${id}`)
@@ -25,12 +28,12 @@ const TaskCard = ({ items, progress }) => {
     }
     if (!items) return null;
 
-    const [isFav, setIsFav] = useState(items.isFavourite);
-
     const handleFavoriteClick = () => {
-        setIsFav(prev => !prev);
-
+        if (typeof onFavoriteToggle === 'function') {
+            onFavoriteToggle(items);
+        }
     };
+
 
     const openAddTaskModal = () => {
         setSelectedTask(null);
@@ -48,15 +51,13 @@ const TaskCard = ({ items, progress }) => {
                     <h3 className="text-lg font-semibold text-gray-800">
                         {items.title}
                     </h3>
-
                     <button
                         onClick={handleFavoriteClick}
                         className="transition-transform duration-200 hover:scale-110"
-                        aria-label="Toggle Favorite"
                     >
                         <svg
-                            className={`w-6 h-6 ${isFav ? 'text-red-500' : 'text-gray-400'}`}
-                            fill={isFav ? 'currentColor' : 'none'}
+                            className={`w-6 h-6 ${items.isFavourite ? 'text-red-500' : 'text-gray-400'}`}
+                            fill={items.isFavourite ? 'currentColor' : 'none'}
                             stroke="currentColor"
                             viewBox="0 0 24 24"
                         >
@@ -103,30 +104,37 @@ const TaskCard = ({ items, progress }) => {
                 </div>
 
                 <div className="flex justify-end gap-2 mt-4">
-
                     <button
-                        // onClick={openAddTaskModal}
-                        onClick={() => { handleId(items._id) }}
-                        className="bg-green-500 text-white px-3 py-1 rounded 
-                               hover:bg-green-600 transition-colors"
+                        onClick={() => {
+                            setEditId(items._id);
+                            setIsEditOpen(true);
+                        }}
+                        className="bg-green-500 text-white px-3 py-1 rounded"
                     >
                         Edit
                     </button>
 
                     <button
-                        // onClick={handleDelete}
-                        onClick={() => { handleDelete(items._id) }}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                        onClick={() => handleDeleteClick(items._id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded"
                     >
                         Delete
                     </button>
                 </div>
             </div>
+
             <EditModal
-                show={showModal} id={editId} handleClose={() => { setShowModal(false) }}
+                show={isEditOpen}
+                id={editId}
+                handleClose={() => setIsEditOpen(false)}
             />
+
             <ConfirmModal
-                show={showModal} id={deleteId} handleClose={() => { setShowModal(false) }} />
+                isOpen={isConfirmOpen}
+                title="Confirm Deletion"
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={confirmDelete}
+            />
         </div>
     );
 };

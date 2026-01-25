@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ConfirmModal = ({ isOpen, onClose, onConfirm, title }) => {
+const ConfirmModal = ({ handleClose, isOpen, title, onConfirm }) => {
   if (!isOpen) return null;
 
   return (
@@ -9,7 +9,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title }) => {
         <h2 className="text-xl font-bold text-gray-800 mb-4">{title}</h2>
         <p className="text-gray-600 mb-6">Are You Agree to Delete the task Permanently</p>
         <div className="flex justify-end space-x-4">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+          <button onClick={handleClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
             Cancel
           </button>
           <button onClick={onConfirm} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition-colors">

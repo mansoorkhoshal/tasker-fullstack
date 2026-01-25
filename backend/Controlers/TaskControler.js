@@ -8,7 +8,7 @@ exports.createTask = async (req, res) => {
       dueDate,
       dueTime,
       progress,
-      createdBy,
+      // createdBy,
       categoryId,
       statusId,
       priorityId,
@@ -19,7 +19,7 @@ exports.createTask = async (req, res) => {
       dueDate,
       dueTime,
       progress,
-      createdBy,
+      // createdBy,
       categoryId,
       statusId,
       priorityId,
@@ -120,7 +120,7 @@ exports.AddToFav = async (req, res) => {
 exports.GetFavouriteTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ isFavourite: true })
-      .populate("createdBy")
+      // .populate("createdBy")
       .populate("categoryId")
       .populate("statusId")
       .populate("priorityId");
@@ -163,7 +163,7 @@ exports.UpdateTask = async (req, res) => {
     dueDate,
     dueTime,
     progress,
-    createdBy,
+    // createdBy,
     categoryId,
     statusId,
     priorityId,
@@ -176,7 +176,7 @@ exports.UpdateTask = async (req, res) => {
       dueDate,
       dueTime,
       progress,
-      createdBy,
+      // createdBy,
       categoryId,
       statusId,
       priorityId,
