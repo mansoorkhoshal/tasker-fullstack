@@ -8,7 +8,7 @@ router.get("/", taskResult.getAllTasks);
 router.get("/favourites", taskResult.GetFavouriteTasks);
 router.get("/user/:userId", taskResult.GetTaskByUser);
 
-router.put("/favourite/:id", taskResult.AddToFav);
+router.post("/favourite", taskResult.AddToFav);
 router.put("/:id", taskResult.UpdateTask);
 
 router.get("/:id", taskResult.GetTaskById);

@@ -5,16 +5,17 @@ import Loader from '../Components/Loader';
 import TaskModal from '../Components/TaskModal';
 import ConfirmModal from '../Components/ConfirmModal';
 
-const Home = () => { 
+const Home = () => {
     const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
-   
+
 
     const openAddTaskModal = () => {
         setSelectedTask(null);
         setIsTaskModalOpen(true);
     };
+
 
     return (
         <div className="">
@@ -37,6 +38,7 @@ const Home = () => {
                 isOpen={isTaskModalOpen}
                 onClose={() => setIsTaskModalOpen(false)}
                 // onSave={handleSaveTask}
+                // onDelete={handleDelete}
                 task={selectedTask}
             />
 

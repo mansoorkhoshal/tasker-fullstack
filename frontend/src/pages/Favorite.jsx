@@ -19,7 +19,7 @@ const Favorite = () => {
             try {
                 setLoading(true);
 
-                const res = await fetch('http://localhost:4000/api/task/favourite');
+                const res = await fetch('http://localhost:4000/api/task/favourites');
                 const json = await res.json();
 
                 // setFavoriteTasks(json.data);
@@ -41,6 +41,10 @@ const Favorite = () => {
         try {
             await fetch(`http://localhost:4000/api/task/favourite/${task._id}`, {
                 method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
             });
 
             setFavoriteTasks(prev =>

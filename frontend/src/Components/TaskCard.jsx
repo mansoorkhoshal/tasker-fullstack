@@ -10,16 +10,45 @@ const TaskCard = ({ items, progress, onFavoriteToggle, onDelete }) => {
     const [editId, setEditId] = useState(null);
     const [isEditOpen, setIsEditOpen] = useState(false);
 
+    function takeIdFromFav(id) {
+        try {
+            fetch(`http://localhost:400/api/task/favorite/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            }).then((response) => {
+                if (response.status == 200 || response.status == 201) {
+                    alert('task added to favorite')
+                    window.location.reload()
+                }
+            }).catch((error) => {
+                console.log(error.message)
+            })
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     const handleDeleteClick = (id) => {
+        // alert(id)
         setDeleteId(id);
         setIsConfirmOpen(true);
     };
 
+    // const confirmDelete = () => {
+    //     onDelete(deleteId);
+    //     setIsConfirmOpen(false);
+    //     setDeleteId(null);
+    // };
     const confirmDelete = () => {
-        onDelete(deleteId);
+        if (typeof onDelete === 'function') {
+            onDelete(deleteId);
+        }
         setIsConfirmOpen(false);
         setDeleteId(null);
     };
+
 
     function handleId(id) {
         alert(`id of this card is ${id}`)
@@ -131,9 +160,9 @@ const TaskCard = ({ items, progress, onFavoriteToggle, onDelete }) => {
 
             <ConfirmModal
                 isOpen={isConfirmOpen}
-                title="Confirm Deletion"
-                onClose={() => setIsConfirmOpen(false)}
-                onConfirm={confirmDelete}
+                handleClose={() => setIsConfirmOpen(false)}
+                // onConfirm={confirmDelete}
+                id={deleteId}
             />
         </div>
     );

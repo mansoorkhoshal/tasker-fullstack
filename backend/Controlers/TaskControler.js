@@ -91,11 +91,10 @@ exports.DeleteTask = async (req, res) => {
 
 exports.AddToFav = async (req, res) => {
   try {
-    const task = await Task.findByIdAndUpdate(
-      req.params.id,
-      { isFavourite: true },
-      { new: true }
-    );
+    const { id } = req.body;
+
+    // ✅ Correct way
+    const task = await Task.findById(id);
 
     if (!task) {
       return res.status(404).json({
@@ -104,11 +103,17 @@ exports.AddToFav = async (req, res) => {
       });
     }
 
+    // 🔁 Toggle favourite
+    task.isFavourite = !task.isFavourite;
+
+    await task.save();
+
     res.status(200).json({
       success: true,
-      message: "Task added to favourites",
+      message: `Task ${task.isFavourite ? "added to" : "removed from"} favourites`,
       data: task,
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -116,6 +121,7 @@ exports.AddToFav = async (req, res) => {
     });
   }
 };
+
 
 exports.GetFavouriteTasks = async (req, res) => {
   try {
@@ -181,7 +187,7 @@ exports.UpdateTask = async (req, res) => {
       statusId,
       priorityId,
     },
-    { new: true }
+    { new: true },
   );
   if (result) {
     res.status(200).json("Task updated successfully");

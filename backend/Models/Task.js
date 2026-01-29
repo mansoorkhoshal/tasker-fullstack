@@ -12,7 +12,7 @@ const taskSchema = new Schema({
   },
   isFavourite: {
     type: Schema.Types.Boolean,
-    default: true,
+    default: false,
   },
   dueDate: {
     type: Schema.Types.String,
