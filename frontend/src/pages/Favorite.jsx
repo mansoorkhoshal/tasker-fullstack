@@ -14,6 +14,27 @@ const Favorite = () => {
     const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
 
+    // useEffect(() => {
+    //     const fetchFavoriteTasks = async () => {
+    //         try {
+    //             setLoading(true);
+
+    //             const res = await fetch('http://localhost:4000/api/task/favourites');
+    //             const json = await res.json();
+
+    //             // setFavoriteTasks(json.data);
+    //             setFavoriteTasks(Array.isArray(json.data) ? json.data : []);
+
+    //         } catch (error) {
+    //             console.error('Failed to fetch favorites', error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchFavoriteTasks();
+    // }, []);
+
     useEffect(() => {
         const fetchFavoriteTasks = async () => {
             try {
@@ -22,9 +43,12 @@ const Favorite = () => {
                 const res = await fetch('http://localhost:4000/api/task/favourites');
                 const json = await res.json();
 
-                // setFavoriteTasks(json.data);
-                setFavoriteTasks(Array.isArray(json.data) ? json.data : []);
+                // ✅ CORRECT FIELD NAME: isFavourite
+                const onlyFavorites = Array.isArray(json.data)
+                    ? json.data.filter(task => task.isFavourite === true)
+                    : [];
 
+                setFavoriteTasks(onlyFavorites);
             } catch (error) {
                 console.error('Failed to fetch favorites', error);
             } finally {
@@ -36,25 +60,25 @@ const Favorite = () => {
     }, []);
 
 
-
     const handleFavoriteToggle = async (task) => {
         try {
-            await fetch(`http://localhost:4000/api/task/favourite/${task._id}`, {
+            await fetch('http://localhost:4000/api/task/favourite', {
                 method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ id: task._id }),
             });
 
+            // remove from UI immediately
             setFavoriteTasks(prev =>
                 prev.filter(t => t._id !== task._id)
             );
-
         } catch (error) {
             console.error('Failed to toggle favorite', error);
         }
     };
+
 
 
 
@@ -82,16 +106,16 @@ const Favorite = () => {
     };
 
 
-    const handleSaveTask = async (taskData) => {
-        const updated = await updateTask(taskData);
+    // const handleSaveTask = async (taskData) => {
+    //     const updated = await updateTask(taskData);
 
-        setFavoriteTasks(prev =>
-            prev.map(t => t._id === updated._id ? updated : t)
-        );
+    //     setFavoriteTasks(prev =>
+    //         prev.map(t => t._id === updated._id ? updated : t)
+    //     );
 
-        setIsTaskModalOpen(false);
-        setSelectedTask(null);
-    };
+    //     setIsTaskModalOpen(false);
+    //     setSelectedTask(null);
+    // };
 
     if (loading) return <Loader />;
 
@@ -121,21 +145,21 @@ const Favorite = () => {
                     No favorite tasks yet
                 </p>
             )}
-
+            {/* 
             <TaskModal
                 isOpen={isTaskModalOpen}
                 onClose={() => setIsTaskModalOpen(false)}
                 onSave={handleSaveTask}
                 task={selectedTask}
-            />
-
+            /> */}
+            {/* 
             <ConfirmModal
                 isOpen={isConfirmModalOpen}
                 onClose={() => setIsConfirmModalOpen(false)}
                 onConfirm={confirmDelete}
                 title="Confirm Deletion"
                 message="Are you sure you want to delete this task?"
-            />
+            /> */}
         </div>
     );
 };

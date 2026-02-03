@@ -9,18 +9,25 @@ const TaskCard = ({ items, progress, onFavoriteToggle, onDelete }) => {
     const [deleteId, setDeleteId] = useState(null);
     const [editId, setEditId] = useState(null);
     const [isEditOpen, setIsEditOpen] = useState(false);
-
+    const [fav, setFav] = useState('')
     function takeIdFromFav(id) {
+        // alert(id)
+        // console.log(id)
         try {
-            fetch(`http://localhost:400/api/task/favorite/${id}`, {
-                method: 'GET',
+            fetch(`http://localhost:4000/api/task/favourite/${id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': "application/json"
                 }
             }).then((response) => {
                 if (response.status == 200 || response.status == 201) {
-                    alert('task added to favorite')
-                    window.location.reload()
+                    // alert('task added to favorite')
+                    // window.location.reload()
+
+                    response.json().then((jsonData) => {
+                        setFav(jsonData.data.isFavourite)
+                        window.location.reload()
+                    })
                 }
             }).catch((error) => {
                 console.log(error.message)
@@ -81,7 +88,7 @@ const TaskCard = ({ items, progress, onFavoriteToggle, onDelete }) => {
                         {items.title}
                     </h3>
                     <button
-                        onClick={handleFavoriteClick}
+                        onClick={() => { takeIdFromFav(items._id) }}
                         className="transition-transform duration-200 hover:scale-110"
                     >
                         <svg

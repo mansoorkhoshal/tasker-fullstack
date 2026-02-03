@@ -91,7 +91,7 @@ exports.DeleteTask = async (req, res) => {
 
 exports.AddToFav = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     // ✅ Correct way
     const task = await Task.findById(id);

@@ -1,5 +1,7 @@
 import React from 'react';
 import { useForm } from "react-hook-form"
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/features/userSlices';
 import { ToastContainer, toast } from 'react-toastify';
 const SignupModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
@@ -11,6 +13,8 @@ const SignupModal = ({ isOpen, onClose }) => {
         reset,
         formState: { errors },
     } = useForm();
+
+    const dispatch = useDispatch();
 
     // function handleForm(data) {
     //     // e.preventDefault()
@@ -47,6 +51,16 @@ const SignupModal = ({ isOpen, onClose }) => {
         if (!res.ok) {
             return toast.error(result)
         }
+
+        dispatch(setUser({
+            user: result.user,
+            token: result.token
+        }))
+
+        localStorage.setItem("auth", JSON.stringify({
+            user: result.user,
+            token: result.token
+        }))
 
         toast.success("User Created Successfully")
         reset();
