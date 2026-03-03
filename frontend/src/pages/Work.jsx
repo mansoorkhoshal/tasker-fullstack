@@ -1,103 +1,54 @@
-import React, { useState, useEffect } from 'react';
-// import { getTasks, updateTask, deleteTask as apiDeleteTask } from '../services/api';
+import React, { useEffect, useState } from 'react';
 import TaskCard from '../Components/TaskCard';
 import Loader from '../Components/Loader';
-import ConfirmModal from '../Components/ConfirmModal';
-import TaskModal from '../Components/TaskModal';
 
 const Work = () => {
   const [workTasks, setWorkTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [taskToDelete, setTaskToDelete] = useState(null);
-  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      setLoading(true);
-      const tasks = await getTasks();
-      setWorkTasks(tasks.filter(task => task.category === 'Work'));
-      setLoading(false);
+    const fetchWorkTasks = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch('http://localhost:4000/api/task');
+        const json = await res.json();
+
+        const onlyWork = Array.isArray(json.data)
+          ? json.data.filter(
+              (task) => task.categoryId?.Name?.toLowerCase() === 'work'
+            )
+          : [];
+
+        setWorkTasks(onlyWork);
+      } catch (error) {
+        console.error('Failed to fetch work tasks', error);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchTasks();
+
+    fetchWorkTasks();
   }, []);
 
-  const handleFavoriteToggle = async (taskId) => {
-    const task = workTasks.find(t => t.id === taskId);
-    if (task) {
-      const updatedTask = { ...task, isFavorite: !task.isFavorite };
-      await updateTask(updatedTask);
-      setWorkTasks(workTasks.map(t => t.id === taskId ? updatedTask : t));
-    }
-  };
-
-  const handleEdit = (task) => {
-    setSelectedTask(task);
-    setIsTaskModalOpen(true);
-  };
-
-  const handleDelete = (taskId) => {
-    setTaskToDelete(taskId);
-    setIsConfirmModalOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    await apiDeleteTask(taskToDelete);
-    setWorkTasks(workTasks.filter(t => t.id !== taskToDelete));
-    setIsConfirmModalOpen(false);
-    setTaskToDelete(null);
-  };
-
-  const handleSaveTask = async (taskData) => {
-    const updated = await updateTask(taskData);
-    setWorkTasks(workTasks.map(t => t.id === updated.id ? updated : t));
-    setIsTaskModalOpen(false);
-    setSelectedTask(null);
-  };
-
-  const openAddTaskModal = () => {
-    setSelectedTask(null);
-    setIsTaskModalOpen(true);
-  }
-
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
   return (
-    <div>
-      <div className='flex justify-between gap-4 sm:flex-row sm:justify-between sm:items-center my-6 mx-4 sm:mx-8 lg:mx-20 border p-4 rounded-2xl shadow-lg border-gray-300 bg-linear-to-br from-blue-50 via-white to-blue-100'>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-600 text-center sm:text-left">Work Tasks</h1>
+    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+      <div className='flex justify-between items-center gap-4 my-6 bg-white/80 backdrop-blur-md border border-blue-100 rounded-2xl p-5 shadow-md bg-linear-to-br from-blue-50 via-white to-blue-100'>
+        <h1 className='text-2xl sm:text-3xl font-bold text-gray-700'>Work Tasks</h1>
       </div>
+
       {workTasks.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-4">
-          {workTasks.map(task => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onFavoriteToggle={handleFavoriteToggle}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4'>
+          {workTasks.map((task) => (
+            <TaskCard key={task._id} items={task} progress={task.progress} />
           ))}
         </div>
       ) : (
-        <p className="text-gray-500 items-center flex justify-center mt-17 text-lg">You have no tasks in the work category.</p>
+        <p className='text-center text-gray-500 text-lg mt-10'>
+          No Work tasks yet
+        </p>
       )}
-      <TaskModal
-        isOpen={isTaskModalOpen}
-        onClose={() => setIsTaskModalOpen(false)}
-        onSave={handleSaveTask}
-        task={selectedTask}
-      />
-      <ConfirmModal
-        isOpen={isConfirmModalOpen}
-        onClose={() => setIsConfirmModalOpen(false)}
-        onConfirm={confirmDelete}
-        title="Confirm Deletion"
-        message="Are you sure you want to delete this task?"
-      />
     </div>
   );
 };

@@ -48,8 +48,7 @@ const Home = () => {
                 </div>
             </div>
 
-            {
-                taskStore && taskStore.length === 0 ? (
+            {taskStore && taskStore.length === 0 ? (
                     <div className="text-center text-gray-500 mt-20">
                         No tasks found. Start by adding one
                     </div>
