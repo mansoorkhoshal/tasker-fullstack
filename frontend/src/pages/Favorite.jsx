@@ -43,7 +43,6 @@ const Favorite = () => {
                 const res = await fetch('http://localhost:4000/api/task/favourites');
                 const json = await res.json();
 
-                // ✅ CORRECT FIELD NAME: isFavourite
                 const onlyFavorites = Array.isArray(json.data)
                     ? json.data.filter(task => task.isFavourite === true)
                     : [];
@@ -69,7 +68,6 @@ const Favorite = () => {
                 },
                 body: JSON.stringify({ id: task._id }),
             });
-
             // remove from UI immediately
             setFavoriteTasks(prev =>
                 prev.filter(t => t._id !== task._id)
@@ -78,9 +76,6 @@ const Favorite = () => {
             console.error('Failed to toggle favorite', error);
         }
     };
-
-
-
 
     const handleEdit = (task) => {
         setSelectedTask(task);
@@ -104,7 +99,6 @@ const Favorite = () => {
         setIsConfirmModalOpen(false);
         setTaskToDelete(null);
     };
-
 
     // const handleSaveTask = async (taskData) => {
     //     const updated = await updateTask(taskData);
