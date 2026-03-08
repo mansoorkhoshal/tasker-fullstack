@@ -13,6 +13,12 @@ exports.createTask = async (req, res) => {
       statusId,
       priorityId,
     } = req.body;
+    if (!statusId) {
+      const pendingStatus = await require("../Models/Status").Status.findOne({
+        Name: "Pending",
+      });
+      statusId = pendingStatus?._id;
+    }
     const task = await Task.create({
       title,
       description,
@@ -103,7 +109,7 @@ exports.AddToFav = async (req, res) => {
       });
     }
 
-    // 🔁 Toggle favourite
+    // Toggle favourite
     task.isFavourite = !task.isFavourite;
 
     await task.save();
@@ -113,7 +119,6 @@ exports.AddToFav = async (req, res) => {
       message: `Task ${task.isFavourite ? "added to" : "removed from"} favourites`,
       data: task,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -121,7 +126,6 @@ exports.AddToFav = async (req, res) => {
     });
   }
 };
-
 
 exports.GetFavouriteTasks = async (req, res) => {
   try {

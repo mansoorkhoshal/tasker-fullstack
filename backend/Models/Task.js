@@ -23,7 +23,8 @@ const taskSchema = new Schema({
     required: true,
   },
   progress: {
-    type: Schema.Types.String,
+    // type: Schema.Types.String,
+    type: Schema.Types.Number,
     default: 0,
   },
   // createdBy: {
@@ -42,6 +43,7 @@ const taskSchema = new Schema({
   statusId: {
     type: Schema.Types.ObjectId,
     ref: "Status",
+    default: "6975fb7147485c19cfb21970",
   },
   priorityId: {
     type: Schema.Types.ObjectId,

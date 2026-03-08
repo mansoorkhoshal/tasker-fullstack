@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./Components/Navbar";
@@ -12,39 +12,49 @@ import Favorite from "./pages/Favorite";
 import Work from "./pages/Work";
 import Personal from "./pages/Personal";
 import Learning from "./pages/Learning";
-import TaskCard from "./Components/TaskCard";
+
 import { useSelector } from "react-redux";
 import Navbar23 from "./Components/Navbar23";
+
 const App = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
-  const token = useSelector(state => state.user.token)
+  const token = useSelector(state => state.user.token);
+
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
 
+      {/* Navbar */}
       {
-        token ? <Navbar23 /> : <Navbar
-          onLoginClick={() => {
-            setIsLoginOpen(true);
-            setIsSignupOpen(false);
-          }}
-          onSignupClick={() => {
-            setIsSignupOpen(true);
-            setIsLoginOpen(false);
-          }}
-        />
-
+        token ? (
+          <Navbar23 />
+        ) : (
+          <Navbar
+            onLoginClick={() => {
+              setIsLoginOpen(true);
+              setIsSignupOpen(false);
+            }}
+            onSignupClick={() => {
+              setIsSignupOpen(true);
+              setIsLoginOpen(false);
+            }}
+          />
+        )
       }
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/favorites" element={<Favorite />} />
-        <Route path="/work" element={<Work />} />
-        <Route path="/personal" element={<Personal />} />
-        <Route path="/learning" element={<Learning />} />
-      </Routes>
+      {/* Main Content */}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/favorites" element={<Favorite />} />
+          <Route path="/work" element={<Work />} />
+          <Route path="/personal" element={<Personal />} />
+          <Route path="/learning" element={<Learning />} />
+        </Routes>
+      </main>
 
+      {/* Modals */}
       <LoginModal
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
@@ -60,10 +70,10 @@ const App = () => {
         onClose={() => setIsSignupOpen(false)}
       />
 
+      {/* Footer */}
+      <Footer />
 
-
-      < Footer />
-    </>
+    </div>
   );
 };
 
