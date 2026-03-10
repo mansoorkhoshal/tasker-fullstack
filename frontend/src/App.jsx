@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./Components/Navbar";
+import Navbar23 from "./Components/Navbar23";
 import Footer from "./Components/Footer";
 
 import LoginModal from "./Components/LoginModal";
@@ -12,11 +13,14 @@ import Favorite from "./pages/Favorite";
 import Work from "./pages/Work";
 import Personal from "./pages/Personal";
 import Learning from "./pages/Learning";
+import Welcome from "./pages/Welcome";
+
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 import { useSelector } from "react-redux";
-import Navbar23 from "./Components/Navbar23";
 
 const App = () => {
+
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
@@ -26,43 +30,93 @@ const App = () => {
     <div className="min-h-screen flex flex-col">
 
       {/* Navbar */}
-      {
-        token ? (
-          <Navbar23 />
-        ) : (
-          <Navbar
-            onLoginClick={() => {
-              setIsLoginOpen(true);
-              setIsSignupOpen(false);
-            }}
-            onSignupClick={() => {
-              setIsSignupOpen(true);
-              setIsLoginOpen(false);
-            }}
-          />
-        )
-      }
+      {token ? (
+        <Navbar23 />
+      ) : (
+        <Navbar
+          onLoginClick={() => {
+            setIsLoginOpen(true);
+            setIsSignupOpen(false);
+          }}
+          onSignupClick={() => {
+            setIsSignupOpen(true);
+            setIsLoginOpen(false);
+          }}
+        />
+      )}
 
       {/* Main Content */}
-      <main className="flex-grow">
+      <main className="grow">
+
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/favorites" element={<Favorite />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/personal" element={<Personal />} />
-          <Route path="/learning" element={<Learning />} />
+
+          {/* Welcome page */}
+          <Route
+            path="/welcome"
+            element={
+              <Welcome
+                onLoginClick={() => setIsLoginOpen(true)}
+                onSignupClick={() => setIsSignupOpen(true)}
+              />
+            }
+          />
+
+          {/* Protected Routes */}
+
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRoute>
+                <Favorite />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/work"
+            element={
+              <ProtectedRoute>
+                <Work />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/personal"
+            element={
+              <ProtectedRoute>
+                <Personal />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/learning"
+            element={
+              <ProtectedRoute>
+                <Learning />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
+
       </main>
 
       {/* Modals */}
+
       <LoginModal
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
-        onLogin={(e) => {
-          e.preventDefault();
-          console.log("Login submitted");
-          setIsLoginOpen(false);
-        }}
       />
 
       <SignupModal

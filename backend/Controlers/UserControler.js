@@ -155,7 +155,7 @@ exports.Login = async (req, res) => {
 
     const token = jwt.sign(
       {
-        fullName: existingUser.fullName, // ✅ FIXED
+        fullName: existingUser.fullName,
         email: existingUser.email,
       },
       process.env.KEY,

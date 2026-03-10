@@ -1,19 +1,20 @@
 const { ConnectDB } = require("./UTILS/DbConnect");
 const express = require("express");
-const cors=require("cors")
+const cors = require("cors");
 const app = express();
 ConnectDB();
 
 app.use(express.json());
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }));
 
 // const cors = require("cors");
 
-app.use(cors({
-  origin: "http://localhost:5173", // or 3000
-  credentials: true, // 🔥 VERY IMPORTANT
-}));
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true, //  VERY IMPORTANT
+  }),
+);
 
 app.use("/api/category", require("./Routes/CategoryRoute.js"));
 app.use("/api/status", require("./Routes/StatusRoute.js"));

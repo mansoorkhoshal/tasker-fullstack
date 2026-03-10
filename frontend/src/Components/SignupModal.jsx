@@ -30,42 +30,93 @@ const SignupModal = ({ isOpen, onClose }) => {
     //     reset();
     // }
 
+    // async function handleForm(data) {
+    //     console.log("raw form data:", data);
+
+    //     const formData = new FormData();
+
+    //     formData.append("fullName", data.fullName);
+    //     formData.append("email", data.email);
+    //     formData.append("password", data.password);
+    //     formData.append("contact", data.contact);
+    //     formData.append("image", data.image[0]);
+
+    //     const res = await fetch('http://localhost:4000/api/user/signup', {
+    //         method: "POST",
+    //         body: formData
+    //     })
+
+    //     const result = await res.json()
+
+    //     if (!res.ok) {
+    //         return toast.error(result)
+    //     }
+
+    //     dispatch(setUser({
+    //         user: result.user,
+    //         token: result.token
+    //     }))
+
+    //     localStorage.setItem("auth", JSON.stringify({
+    //         user: result.user,
+    //         token: result.token
+    //     }))
+
+    //     toast.success("User Created Successfully")
+
+    //     setTimeout(() => {
+    //         window.location.href = "/";
+    //     }, 1000)
+    //     reset();
+    // }
+
     async function handleForm(data) {
-        console.log("raw form data:", data);
+        try {
 
-        const formData = new FormData();
+            const formData = new FormData();
 
-        formData.append("fullName", data.fullName);
-        formData.append("email", data.email);
-        formData.append("password", data.password);
-        formData.append("contact", data.contact);
-        formData.append("image", data.image[0]);
+            formData.append("fullName", data.fullName);
+            formData.append("email", data.email);
+            formData.append("password", data.password);
+            formData.append("contact", data.contact);
+            formData.append("image", data.image[0]);
 
-        const res = await fetch('http://localhost:4000/api/user/signup', {
-            method: "POST",
-            body: formData
-        })
+            const res = await fetch("http://localhost:4000/api/user/signup", {
+                method: "POST",
+                body: formData,
+                credentials: "include"
+            });
 
-        const result = await res.json()
+            const result = await res.json();
 
-        if (!res.ok) {
-            return toast.error(result)
+            if (!res.ok) {
+                return toast.error(result.message || "Signup failed");
+            }
+
+            dispatch(setUser({
+                user: result.user,
+                token: result.token
+            }));
+
+            localStorage.setItem("auth", JSON.stringify({
+                user: result.user,
+                token: result.token
+            }));
+
+            toast.success("Account created successfully");
+
+            reset();
+            onClose();
+
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1000);
+
+        } catch (error) {
+            toast.error("Something went wrong");
+            console.error(error);
         }
-
-        dispatch(setUser({
-            user: result.user,
-            token: result.token
-        }))
-
-        localStorage.setItem("auth", JSON.stringify({
-            user: result.user,
-            token: result.token
-        }))
-
-        toast.success("User Created Successfully")
-        reset();
     }
-
 
     return (
 
@@ -108,7 +159,12 @@ const SignupModal = ({ isOpen, onClose }) => {
                         <div className="mb-6">
                             <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="image">Profile Image</label>
                             <input className="w-full px-4 py-2 border rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-200 file:text-blue-600 hover:file:bg-blue-300" type="file" id="image"
-                                {...register("image", { required: "Image is necessary for SignUp." })}
+                                // {...register("image", { required: "Image is necessary for SignUp." })}
+                                {...register("image", {
+                                    required: "Image is required",
+                                    validate: (file) =>
+                                        file[0]?.type.startsWith("image/") || "Only image files allowed"
+                                })}
                             />
                         </div>
                         <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-800 transition-colors duration-300 font-semibold" type="submit">

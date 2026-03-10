@@ -19,78 +19,128 @@ const LoginModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
 
 
+  // async function handleForm(data) {
+  //   console.log("raw form data:", data);
+
+  //   try {
+  //     // const payload = {
+  //     //   email: data.email,
+  //     //   password: data.password
+  //     // }
+  //     // const res = await fetch("http://localhost:4000/api/users/login", {
+  //     //   method: "POST",
+  //     //   headers: { "Content-Type": "application/json" },
+  //     //   body: JSON.stringify({
+  //     //     email: data.email,
+  //     //     password: data.password,
+  //     //   }),
+  //     // });
+
+
+  //     // const result = await res.json();
+
+  //     // if (!res.ok) {
+  //     //   return toast.error(result.message)
+  //     // }
+
+  //     // toast.success("User login successfully")
+
+  //     // const res = await fetch("http://localhost:4000/api/users/login", {
+  //     //   method: "POST",
+  //     //   headers: { "Content-Type": "application/json" },
+  //     //   body: JSON.stringify({
+  //     //     email: data.email,
+  //     //     password: data.password,
+  //     //   }),
+  //     // });
+
+  //     const res = await fetch("http://localhost:4000/api/user/login", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       credentials: "include",
+  //       body: JSON.stringify({
+  //         email: data.email,
+  //         password: data.password,
+  //       }),
+  //     });
+
+  //     const result = await res.json();
+
+  //     console.log(result)
+  //     if (!res.ok) {
+  //       return toast.error(result.message || "Login failed");
+  //     }
+  //     dispatch(setUser({
+  //       user: result.user,
+  //       token: result.token
+  //     }))
+
+  //     localStorage.setItem("auth", JSON.stringify({
+  //       user: result.user,
+  //       token: result.token
+  //     }))
+
+  //     toast.success("User login successfully");
+
+  //     setTimeout(() => {
+  //       window.location.href = "/";
+  //     }, 1000)
+
+
+  //   } catch (error) {
+  //     toast.error(error.message || "Some thing went wrong")
+
+
+  //   }
+  // }
   async function handleForm(data) {
-    console.log("raw form data:", data);
-
     try {
-      // const payload = {
-      //   email: data.email,
-      //   password: data.password
-      // }
-      // const res = await fetch("http://localhost:4000/api/users/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     email: data.email,
-      //     password: data.password,
-      //   }),
-      // });
-
-
-      // const result = await res.json();
-
-      // if (!res.ok) {
-      //   return toast.error(result.message)
-      // }
-
-      // toast.success("User login successfully")
-
-      // const res = await fetch("http://localhost:4000/api/users/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     email: data.email,
-      //     password: data.password,
-      //   }),
-      // });
 
       const res = await fetch("http://localhost:4000/api/user/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         credentials: "include",
         body: JSON.stringify({
           email: data.email,
-          password: data.password,
-        }),
+          password: data.password
+        })
       });
 
       const result = await res.json();
 
-      console.log(result)
       if (!res.ok) {
         return toast.error(result.message || "Login failed");
       }
+
       dispatch(setUser({
         user: result.user,
         token: result.token
-      }))
-      
+      }));
+
       localStorage.setItem("auth", JSON.stringify({
         user: result.user,
         token: result.token
-      }))
+      }));
 
-      toast.success("User login successfully");
+      toast.success("Login successful");
 
+      reset();
+      onClose();
 
-
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
 
     } catch (error) {
-      toast.error(error.message || "Some thing went wrong")
 
+      toast.error("Something went wrong");
+      console.error(error);
 
     }
   }
+
 
   return (
     <>

@@ -3,7 +3,7 @@ import React from 'react'
 const Footer = () => {
     return (
         <footer className="w-full mt-16">
-            <div className="border border-gray-200 bg-gradient-to-t from-blue-50 to-white shadow-lg">
+            <div className="border border-gray-200 bg-linear-to-t from-blue-50 to-white shadow-lg">
                 <div className="flex flex-col md:flex-row items-center justify-between px-6 py-6 gap-4">
 
                     <div className="text-center md:text-left">
