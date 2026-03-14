@@ -162,8 +162,8 @@ const SignupModal = ({ isOpen, onClose }) => {
                                 // {...register("image", { required: "Image is necessary for SignUp." })}
                                 {...register("image", {
                                     required: "Image is required",
-                                    validate: (file) =>
-                                        file[0]?.type.startsWith("image/") || "Only image files allowed"
+                                    // validate: (file) =>
+                                    //     file[0]?.type.startsWith("image/") || "Only image files allowed"
                                 })}
                             />
                         </div>

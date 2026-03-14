@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
+import { useSelector } from "react-redux";
 const TaskModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState("basic");
   const [statusData, setStatusData] = useState([]);
@@ -20,7 +20,7 @@ const TaskModal = ({ isOpen, onClose }) => {
   });
 
   const progressValue = watch("progress");
-
+  const user = useSelector(state => state.user.user)
   // Fetch Status
   useEffect(() => {
     fetch("http://localhost:4000/api/status")
@@ -47,7 +47,10 @@ const TaskModal = ({ isOpen, onClose }) => {
     if (loading) return;
 
     setLoading(true);
-
+    if (!user || !user._id) {
+      alert("Login required")
+      return;
+    }
     const payload = {
       title: data.title,
       description: data.description,
@@ -56,6 +59,8 @@ const TaskModal = ({ isOpen, onClose }) => {
       progress: data.progress,
       categoryId: data.categoryId,
       statusId: data.statusId,
+      createdBy: user._id,
+      priorityId: '695fac0e21abdfbdbc5853d6'
     };
 
     try {

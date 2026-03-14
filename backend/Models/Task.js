@@ -27,11 +27,11 @@ const taskSchema = new Schema({
     type: Schema.Types.Number,
     default: 0,
   },
-  // createdBy: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "Users",
-  //   required: true,
-  // },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: "Users",
+    required: true,
+  },
   createdOn: {
     type: Schema.Types.Date,
     default: Date.now,

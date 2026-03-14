@@ -8,7 +8,7 @@ exports.createTask = async (req, res) => {
       dueDate,
       dueTime,
       progress,
-      // createdBy,
+      createdBy,
       categoryId,
       statusId,
       priorityId,
@@ -25,7 +25,7 @@ exports.createTask = async (req, res) => {
       dueDate,
       dueTime,
       progress,
-      // createdBy,
+      createdBy,
       categoryId,
       statusId,
       priorityId,
@@ -46,10 +46,12 @@ exports.createTask = async (req, res) => {
 
 exports.getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find()
+    // const tasks = await Task.find()
+    const tasks = await Task.find({ createdBy: req.params.id })
       .populate("categoryId")
       .populate("statusId")
       .populate("priorityId");
+
 
     res.status(200).json({
       success: true,
@@ -99,7 +101,7 @@ exports.AddToFav = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // ✅ Correct way
+    //  Correct way
     const task = await Task.findById(id);
 
     if (!task) {

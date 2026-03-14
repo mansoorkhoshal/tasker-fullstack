@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/features/userSlices";
 
 const Navbar23 = ({ onLoginClick, onSignupClick }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -91,10 +93,10 @@ const Navbar23 = ({ onLoginClick, onSignupClick }) => {
                                 <p className="text-sm text-gray-600">
                                     <span className="font-medium">Email:</span> {user.email}
                                 </p>
-                                <p className="text-sm text-gray-600">
+                                {/* <p className="text-sm text-gray-600">
                                     <span className="font-medium">Password:</span>{" "}
                                     {user.password}
-                                </p>
+                                </p> */}
 
                                 <button
                                     onClick={handleLogout}

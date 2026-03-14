@@ -19,7 +19,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        fetch('http://localhost:4000/api/task/')
+        fetch('http://localhost:4000/api/task/byuser/69b03986738cba4d4fe5d657')
             .then((resposne) => {
                 if (resposne.status == 200 || resposne.status == 201) {
                     resposne.json()
@@ -49,22 +49,22 @@ const Home = () => {
             </div>
 
             {taskStore && taskStore.length === 0 ? (
-                    <div className="text-center text-gray-500 mt-20">
-                        No tasks found. Start by adding one
-                    </div>
-                ) : (
-                    <div
-                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mx-10"
-                    >
-                        {taskStore.map(task => (
-                            <TaskCard
-                                key={task._id || task.id}
-                                items={task}
-                                progress={task.progress || 0}
-                            />
-                        ))}
-                    </div>
-                )}
+                <div className="text-center text-gray-500 mt-20">
+                    No tasks found. Start by adding one
+                </div>
+            ) : (
+                <div
+                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mx-10"
+                >
+                    {taskStore.map(task => (
+                        <TaskCard
+                            key={task._id || task.id}
+                            items={task}
+                            progress={task.progress || 0}
+                        />
+                    ))}
+                </div>
+            )}
 
             <TaskModal
                 isOpen={isTaskModalOpen}

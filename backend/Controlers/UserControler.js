@@ -90,7 +90,7 @@ exports.Signup = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, 10);
 
     // const imagePath =
-    const userResult = await Users.create({
+    const userResult = await User.create({
       fullName,
       email,
       password: hashPassword,

@@ -18,20 +18,24 @@ import Welcome from "./pages/Welcome";
 import ProtectedRoute from "./Components/ProtectedRoute";
 
 import { useSelector } from "react-redux";
+import TodayNAv from "./Components/TodayNAv";
 
 const App = () => {
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
-  const token = useSelector(state => state.user.token);
+  // const token = useSelector(state => state.user.token);
+  const isAuth = useSelector(state => state.user.isAuthenticate);
 
   return (
     <div className="min-h-screen flex flex-col">
 
       {/* Navbar */}
-      {token ? (
-        <Navbar23 />
+      {isAuth ? (
+        // <Navbar23 />
+        <TodayNAv />
+        // <h1>hello</h1>  
       ) : (
         <Navbar
           onLoginClick={() => {
@@ -43,7 +47,8 @@ const App = () => {
             setIsLoginOpen(false);
           }}
         />
-      )}
+      )
+      }
 
       {/* Main Content */}
       <main className="grow">

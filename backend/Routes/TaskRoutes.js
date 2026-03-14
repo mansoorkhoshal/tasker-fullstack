@@ -3,8 +3,8 @@ const router = express.Router();
 const taskResult = require("../Controlers/TaskControler");
 
 router.post("/", taskResult.createTask);
+router.get("/byuser/:id", taskResult.getAllTasks);
 
-router.get("/", taskResult.getAllTasks);
 router.get("/favourites", taskResult.GetFavouriteTasks);
 router.get("/user/:userId", taskResult.GetTaskByUser);
 
